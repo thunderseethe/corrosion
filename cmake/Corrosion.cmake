@@ -568,6 +568,7 @@ function(_corrosion_add_library_target)
         target_include_directories(${target_name} INTERFACE
             "$<BUILD_INTERFACE:${_crubit_inc_dir}>"
         )
+        add_dependencies(${target_name} crubit_support)
     endif()
 endfunction()
 
