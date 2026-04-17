@@ -7,4 +7,5 @@ corrosion_import_crate(MANIFEST_PATH rust_lib/Cargo.toml)
 
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE rust_lib)
+add_dependencies(main crubit_support)
 
