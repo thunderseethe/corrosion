@@ -616,6 +616,8 @@ function(_corrosion_add_bin_target workspace_manifest_path bin_name out_bin_bypr
 endfunction()
 
 
+option(CORROSION_EXPERIMENTAL_CRUBIT "Enable experimental Crubit support" OFF)
+
 include(CorrosionGenerator)
 
 # Note: `cmake_language(GET_MESSAGE_LOG_LEVEL <output_variable>)` requires CMake 3.25,
@@ -1249,6 +1251,7 @@ corrosion_experimental_crubit(<target_name>)
 ANCHOR_END: corrosion-experimental-crubit
 #]=======================================================================]
 function(corrosion_experimental_crubit target_name)
+    set(CORROSION_EXPERIMENTAL_CRUBIT ON CACHE BOOL "Enable experimental Crubit support" FORCE)
     set_property(GLOBAL PROPERTY CORROSION_CRUBIT_${target_name} ON)
 endfunction()
 
