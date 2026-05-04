@@ -63,7 +63,7 @@ function(_corrosion_setup_crubit out_cargo_crubit out_crubit_depends)
 
     if(installed_cargo_crubit)
         set(cargo_crubit "${installed_cargo_crubit}")
-        set(crubit_depends "")
+        set(crubit_depends "cargo-prebuild")
     else()
         set(local_crubit_install_dir "${CMAKE_BINARY_DIR}/corrosion/cargo-cpp_api_from_rust")
         unset(executable_postfix)
