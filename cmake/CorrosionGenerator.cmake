@@ -197,6 +197,15 @@ function(_generator_add_package_targets)
                 )
             endif()
         endif()
+
+        set(crubit_args "")
+        if(cargo_crubit)
+            list(APPEND crubit_args CARGO_CRUBIT_BIN "${cargo_crubit}")
+        endif()
+        if(crubit_depends)
+            list(APPEND crubit_args CRUBIT_DEPENDS "${crubit_depends}")
+        endif()
+
         if(crubit_enabled AND ("lib" IN_LIST kinds OR "rlib" IN_LIST kinds))
           set(is_crubit_lib ON)
         else()
@@ -236,10 +245,9 @@ function(_generator_add_package_targets)
                 TARGET ${target_name}
                 MANIFEST_PATH "${manifest_path}"
                 WORKSPACE_MANIFEST_PATH "${workspace_manifest_path}"
-                TARGET_KINDS "${kinds}"
-                BYPRODUCTS "${byproducts}"
-                CARGO_CRUBIT_BIN "${cargo_crubit}"
-                CRUBIT_DEPENDS "${crubit_depends}"
+                TARGET_KINDS ${kinds}
+                BYPRODUCTS ${byproducts}
+                ${crubit_args}
                 # Optional
                 ${no_linker_override}
             )
@@ -281,7 +289,7 @@ function(_generator_add_package_targets)
                 MANIFEST_PATH "${manifest_path}"
                 WORKSPACE_MANIFEST_PATH "${workspace_manifest_path}"
                 TARGET_KINDS "bin"
-                BYPRODUCTS "${byproducts}"
+                BYPRODUCTS ${byproducts}
                 # Optional
                 ${no_linker_override}
             )

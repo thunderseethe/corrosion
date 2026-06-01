@@ -663,11 +663,11 @@ function(_add_cargo_build out_cargo_build_out_dir)
     set(one_value_args PACKAGE TARGET MANIFEST_PATH WORKSPACE_MANIFEST_PATH CARGO_CRUBIT_BIN CRUBIT_DEPENDS)
     set(multi_value_args BYPRODUCTS TARGET_KINDS)
     cmake_parse_arguments(
+        PARSE_ARGV 1
         ACB
         "${options}"
         "${one_value_args}"
         "${multi_value_args}"
-        ${ARGN}
     )
 
     if(DEFINED ACB_UNPARSED_ARGUMENTS)
