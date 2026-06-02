@@ -506,9 +506,6 @@ function(_corrosion_add_library_target)
         add_library(${target_name}-static STATIC IMPORTED GLOBAL)
         add_dependencies(${target_name}-static cargo-build_${target_name})
         set_target_properties(${target_name}-static PROPERTIES COR_FILE_NAME ${static_lib_name})
-        if (is_crubit_lib)
-          set_target_properties(${target_name}-static PROPERTIES COR_HEADER_FILE_NAME ${header_name})
-        endif()
 
         _corrosion_set_imported_location("${target_name}-static" "IMPORTED_LOCATION"
                 "ARCHIVE_OUTPUT_DIRECTORY"
@@ -918,6 +915,7 @@ function(_add_cargo_build out_cargo_build_out_dir)
     if(is_crubit_lib)
         if(CMAKE_HOST_WIN32)
             set(lib_path_env_var "PATH")
+            set(path_sep ";")
             # On Windows, DLLs are typically in the bin directory
             get_filename_component(rustc_lib_dir "${_CORROSION_RUSTC}" DIRECTORY)
         else()
@@ -926,6 +924,7 @@ function(_add_cargo_build out_cargo_build_out_dir)
             else()
               set(lib_path_env_var "LD_LIBRARY_PATH")
             endif()
+            set(path_sep ":")
             # On Linux, shared objects are typically in the lib directory
             get_filename_component(rustc_bin_dir "${_CORROSION_RUSTC}" DIRECTORY)
             get_filename_component(rustc_root_dir "${rustc_bin_dir}" DIRECTORY)
@@ -933,7 +932,7 @@ function(_add_cargo_build out_cargo_build_out_dir)
         endif()
         set(rustc_lib_dir_env "${lib_path_env_var}=${rustc_lib_dir}")
         cmake_path(GET ACB_CARGO_CRUBIT_BIN PARENT_PATH cargo_cmd_dir)
-        set(path_env_var "${cargo_cmd_dir}:$ENV{PATH}")
+        set(path_var "PATH=${cargo_cmd_dir}${path_sep}$ENV{PATH}")
 
         # Since cargo cpp_api_from_rust uses cargo build internally, we pass cargo build args after `--`
         set(cargo_args
@@ -956,7 +955,7 @@ function(_add_cargo_build out_cargo_build_out_dir)
         )
     else()
         set(rustc_lib_dir_env "")
-        set(path_env_var "$PATH")
+        set(path_var "")
         set(cargo_args
             rustc
             ${cargo_rustc_filter}
@@ -991,7 +990,7 @@ function(_add_cargo_build out_cargo_build_out_dir)
                 "${cargo_library_path}"
                 "CORROSION_BUILD_DIR=${CMAKE_CURRENT_BINARY_DIR}"
                 "CARGO_BUILD_RUSTC=${rustc_bin}"
-                "PATH=${path_env_var}"
+                "${path_var}"
             ${cargo_bin}
                 ${cargo_args}
 
@@ -1239,6 +1238,11 @@ endfunction()
 ANCHOR: corrosion-experimental-crubit
 ** EXPERIMENTAL **: This function is currently still considered experimental
   and is not officially released yet. Feedback and Suggestions are welcome.
+
+  Crubit generates bindings to allow calling between C++ and Rust. It enables fine grained automated binding generation. Given a Rust crate,
+  Crubit will generate a C++ API allowing calling the public items of that crate (functions, structs, enums, traits, etc). Find more details at https://crubit.rs.
+
+You can enable crubit by adding the following to your CMakeLists.txt:
 
 ```cmake
 corrosion_experimental_crubit(<target_name>)

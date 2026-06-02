@@ -80,8 +80,8 @@ function(_corrosion_setup_crubit out_cargo_crubit out_crubit_depends)
             add_custom_command(OUTPUT "${cargo_crubit}"
                 COMMAND ${CMAKE_COMMAND}
                 -E env
-                "CARGO_BUILD_RUSTC=${_CORROSION_RUSTC}"
-                ${_CORROSION_CARGO} install
+                "CARGO_BUILD_RUSTC=$CACHE{CORROSION_TOOLS_RUSTC}"
+                $CACHE{CORROSION_TOOLS_CARGO} install
                     --path "${crubit_SOURCE_DIR}/cargo/cc_bindings_from_rs/cargo-cpp_api_from_rust"
                     --locked
                     --root "${local_crubit_install_dir}"
