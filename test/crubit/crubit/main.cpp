@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "rust_lib.h"
+#include "crubit/rust_lib.h"
 
 int main() {
   base64::engine::GeneralPurpose engine = rust_lib::make_engine();

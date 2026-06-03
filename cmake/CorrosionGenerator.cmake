@@ -59,6 +59,9 @@ function(_corrosion_setup_crubit out_cargo_crubit out_crubit_depends)
     )
     FetchContent_MakeAvailable(Crubit)
 
+    if (NOT TARGET crubit_support)
+      message(FATAL_ERROR "Internal error - Crubit should have defined a crubit_support cmake target, but did not. Please file a bug at https://github.com/google/crubit/")
+    endif()
     find_program(installed_cargo_crubit cargo-cpp_api_from_rust)
 
     if(installed_cargo_crubit)
